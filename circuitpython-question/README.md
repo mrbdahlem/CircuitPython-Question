@@ -1,6 +1,6 @@
 # 🐍 CircuitPython Question Type
 
-This project defines a custom **CircuitPython-based question type** for an interactive learning platform (inspired by Learn.mycode). It provides both a **student-facing coding interface** and an **instructor editor view**, built with modern web tools.
+This project defines a custom **CircuitPython-based question type** for learn.mycode.run. It provides both a **student-facing coding interface** and an **instructor editor view**, built with modern web tools.
 
 ---
 
