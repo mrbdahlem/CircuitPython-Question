@@ -16,7 +16,7 @@
         <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
         
         <!-- FIX: Other includes -->
-        <script src="/resources/plugin/question/circuitpython/circuitpython.js" />
+        <!-- script src="/resources/plugin/question/circuitpython/circuitpython.js" -->
         
         <script type='text/javascript'>
 let getSubmission = {};
@@ -60,10 +60,7 @@ let getQuestionEditorData = {};
                 <div th:replace="fragments/scoreblock :: score"></div>
 
                 <script type="module" th:inline="javascript">
-                import {
-                CircuitPythonStudentUI,
-                getResponse
-                } from '/resources/plugin/question/circuitpython/circuitpython.js';
+                import { CircuitPythonStudentUI, getResponse } from '/resources/plugin/question/circuitpython/circuitpython.js';
 
                 getSubmission['circuitpython'] = getResponse;
 
@@ -111,10 +108,7 @@ let getQuestionEditorData = {};
                 <div id="circuitpython-root"></div>
 
                 <script type="module" th:inline="javascript">
-                import {
-                CircuitPythonInstructorUI,
-                getQuestionEditorData
-                } from '/resources/plugin/question/circuitpython/circuitpython.js';
+                import { CircuitPythonInstructorUI, getQuestionEditorData } from '/resources/plugin/question/circuitpython/circuitpython.js';
 
                 initializeQuestion['circuitpython'] = CircuitPythonInstructorUI;
                 getQuestionEditorData['circuitpython'] = getQuestionEditorData;

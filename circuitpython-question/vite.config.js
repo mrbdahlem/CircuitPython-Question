@@ -28,6 +28,7 @@ function moveManifestPlugin() {
 export default defineConfig({
   plugins: [react(), tailwindcss(), moveManifestPlugin()],
   build: {
+    treeshake: false,
     emptyOutDir: true,
     outDir: 'dist/src/main/webapp',
     manifest: true,

@@ -15,7 +15,9 @@ export function getQuestionEditorData(questionEl) {
   return editorData[questionEl.id] || {};
 }
 
-export function CircuitPythonStudentUI(questionEl, questionData, responseData) {
+console.log('✅ circuitpython.js loaded and not tree-shaken');
+
+export const CircuitPythonStudentUI = (questionEl, questionData, responseData) => {
   const mount = questionEl.querySelector('#circuitpython-root');
 
   const onResponseChange = (data) => {
@@ -47,3 +49,8 @@ export function CircuitPythonInstructorUI(questionEl, questionData) {
     })
   );
 }
+
+console.log('Exports:', {
+  CircuitPythonStudentUI,
+  CircuitPythonInstructorUI
+});
