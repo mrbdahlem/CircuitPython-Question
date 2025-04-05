@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run copy-html",
+    "copy-html": "mkdir -p dist/src/main/resources/templates/fragments/question && cp src/templates/circuitpython.html dist/src/main/resources/templates/fragments/question/circuitpython.html",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",

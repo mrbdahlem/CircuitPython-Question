@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import CircuitPythonStudent from './components/CircuitPythonStudent.jsx';
 import CircuitPythonInstructor from './components/CircuitPythonInstructor.jsx';
+import "./circuitpython.css";
 
 let responses = {};
 let editorData = {};
