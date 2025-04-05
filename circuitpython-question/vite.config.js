@@ -58,7 +58,7 @@ function mirrorSourceToPublicPlugin() {
           const src = join(builtDir, file);
           const dest = join(devDir, file);
           fs.copyFileSync(src, dest);
-          console.log(`📦 Copied: ${src} → ${dest}`);
+          // console.log(`📦 Copied: ${src} → ${dest}`);
         }
       };
 

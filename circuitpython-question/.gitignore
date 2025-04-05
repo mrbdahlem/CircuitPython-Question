@@ -12,6 +12,7 @@ storybook-static
 # Build output
 dist
 dist-ssr
+public
 
 # Editor directories and files
 .vscode/*

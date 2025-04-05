@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build && npm run copy-html",
-    "copy-html": "mkdir -p dist/src/main/resources/templates/fragments/question && cp src/templates/circuitpython.html dist/src/main/resources/templates/fragments/question/circuitpython.html",
+    "dev": "vite --host",   
+    "build": "vite build",
+    "dev:full": "npm run build && vite --host",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
