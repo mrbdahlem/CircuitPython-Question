@@ -31,7 +31,7 @@ function moveHtmlFragmentPlugin() {
     name: 'move-html-fragment',
     apply: 'build',
     closeBundle() {
-      const from = path.resolve(__dirname, 'dist/src/main/webapp/circuitpython.html');
+      const from = path.resolve(__dirname, 'dist/src/main/webapp/index.html');
       const to = path.resolve(__dirname, 'dist/src/main/resources/templates/fragments/question/circuitpython.html');
 
       fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -41,6 +41,19 @@ function moveHtmlFragmentPlugin() {
       console.log('📄 Moved circuitpython.html → templates/fragments/question');
     }
   };
+}
+
+const startUrlFallbackPlugin = {
+  name: 'start-url-fallback',
+  configureServer(server) {
+    server.middlewares.use(async (req, res, next) => {
+      if (req.url === '/' || req.url === '/index.html') {
+        req.url = `/circuitpython.html`
+      }
+
+      next()
+    })
+  }
 }
 
 export default defineConfig(({ command }) => {
@@ -54,16 +67,12 @@ export default defineConfig(({ command }) => {
     },
     server: {
       port: 3000,
-      open: '/circuitpython.html',
+      open: './circuitpython.html',
       proxy: {
         '^/resources/(?!plugin/question/circuitpython)': {
         target: 'https://learn.mycode.run',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/resources/, '/resources'),
-      },
-      
-      watch: {
-        ignored: ['!**/src/**'],
       },
     },
     fs: {
@@ -78,7 +87,8 @@ export default defineConfig(({ command }) => {
       react(),
       tailwindcss(),
       moveManifestPlugin(),
-      moveHtmlFragmentPlugin()
+      moveHtmlFragmentPlugin(),
+      startUrlFallbackPlugin
     ],
     build: {
       rollupOptions: {

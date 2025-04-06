@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../circuitpython.css';
+import '/src/circuitpython.css';
 
 /**
  * Props:
@@ -7,7 +7,7 @@ import '../circuitpython.css';
  * - responseData: object containing saved student response
  * - onResponseChange: callback to notify host system of response updates
  */
-export default function CircuitPython({ questionData, responseData, onResponseChange }) {
+export default function CircuitPythonStudent({ questionData, responseData, onResponseChange }) {
     const [code, setCode] = useState('');
   
     // Initialize with saved response or starter code

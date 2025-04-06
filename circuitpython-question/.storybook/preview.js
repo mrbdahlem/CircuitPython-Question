@@ -1,4 +1,4 @@
-import '/src/index.css';
+import '/src/circuitpython.css';
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {

@@ -72,7 +72,7 @@ window.getQuestionEditorData = {};
                     import('/src/circuitpython.js').then(({ CircuitPythonStudentUI, getResponse }) => {
                         window.getSubmission['circuitpython'] = getResponse;
 
-                        CircuitPythonStudentUI(document.getElementById('circuitpython-root'), questionData);
+                        CircuitPythonStudentUI(question, questionData);
                     });
                     })();
                 </script>

@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function CircuitPythonInstructor({ questionData, onChange }) {
   return (
-    <div className="bg-gray-50 border p-4 rounded">
+    <div className="bg-white border p-4 rounded">
       <h4 className="text-lg font-bold mb-2">Instructor Editor</h4>
       <p className="text-sm text-gray-600">This will be the instructor view for configuring the question.</p>
 
