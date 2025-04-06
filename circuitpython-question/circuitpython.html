@@ -1,169 +1,179 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>CircuitPython Question</title>
-        <meta charset="UTF-8">
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel='stylesheet' href='https://learn.mycode.run/resources/css/assignment.css' />
-        <link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
-        
-        <!-- FIX: CSS Includes -->
-        <link rel="stylesheet" href="/src/circuitpython.css" />
-        
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
-        <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
-        
-        <!-- FIX: Other includes -->
-        <!-- <script type="module" src="/src/circuitpython.js"></script> -->
 
-        
-        <script type='text/javascript'>
-window.getSubmission = {};
-window.initializeQuestion = {};
-window.applyQuestionData = {};
-window.getQuestionEditorData = {};
-        </script>
-    </head>
-    <body>
-        <!-- VITE_PROCESSING_CHECK -->
+<head>
+    <title>CircuitPython Question</title>
+    <meta charset="UTF-8">
 
-        <nav>
-            <ul class="nav nav-tabs">
-                <li role="presentation" >
-                    <a href="#questionDisplay" aria-controls="question" role="tab" data-toggle="tab">Question</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="#questionEditor" aria-controls="editor" role="tab" data-toggle="tab">Editor</a>
-                </li>
-            </ul>
-        </nav>
-        <div class="tab-content">
-            <div id="questionDisplay" role="tabpanel" class="tab-pane">
-                <!---------------------------------------------------------------------------->
-                <!-- CircuitPython Student View Fragment ------------------------------------>
-                <!---------------------------------------------------------------------------->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://learn.mycode.run/resources/css/assignment.css' />
+    <link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
 
-                <div class="circuitpythonquestion question studentView clearfix"
-                th:fragment="question"
-                th:id="|question_${question.id}|"
-                id="question_1234"
-                th:jsondata='${question.data}'
-                questionType="circuitpython"
-                th:qid='${question.id}'
+    <!-- FIX: CSS Includes -->
+    <link rel="stylesheet" href="/src/circuitpython.css" />
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
+
+    <!-- FIX: Other includes -->
+    <!-- <script type="module" src="/src/circuitpython.js"></script> -->
+
+
+    <script type='text/javascript'>
+        getSubmission = {};
+        initializeQuestion = {};
+        applyQuestionData = {};
+        getQuestionEditorData = {};
+    </script>
+</head>
+
+<body>
+    <!-- VITE_PROCESSING_CHECK -->
+
+    <nav>
+        <ul class="nav nav-tabs">
+            <li role="presentation">
+                <a href="#questionDisplay" aria-controls="question" role="tab" data-toggle="tab">Question</a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="#questionEditor" aria-controls="editor" role="tab" data-toggle="tab">Editor</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="tab-content">
+        <div id="questionDisplay" role="tabpanel" class="tab-pane">
+            <!---------------------------------------------------------------------------->
+            <!-- CircuitPython Student View Fragment ------------------------------------>
+            <!---------------------------------------------------------------------------->
+
+            <div class="circuitpythonquestion question studentView clearfix" th:fragment="question"
+                th:id="|question_${question.id}|" id="question_1234" th:jsondata='${question.data}'
+                questionType="circuitpython" th:qid='${question.id}'
                 th:with="response = ${submission != null ? submission.getQuestionResponse(question.id) : null}">
 
                 <div class="textdescription" th:utext="${question.prompt}">
-                CircuitPython student prompt goes here.
+                    CircuitPython student prompt goes here.
                 </div>
 
-                <div id="circuitpython-root"></div>
+                <div class="circuitpythonContainer"></div>
 
                 <div th:replace="fragments/scoreblock :: score"></div>
 
                 <script type="module" th:inline="javascript">
                     (() => {
-                    const questionData = /*[[${question.data}]]*/ null;
-                    const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
-                    const questionNum = /*[[${question.id}]]*/ 1234;
-                    const question = document.querySelector(`#question_${questionNum}`);
+                        const questionData = /*[[${question.data}]]*/ null;
+                        const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
+                        const questionNum = /*[[${question.id}]]*/ 1234;
+                        const question = document.querySelector(`#question_${questionNum}`);
 
-                    import('/src/circuitpython.js').then(({ CircuitPythonStudentUI, getResponse }) => {
-                        window.getSubmission['circuitpython'] = getResponse;
+                        import('/src/circuitpython.js').then(({ CircuitPythonStudentUI, getResponse }) => {
+                            window.getSubmission['circuitpython'] = getResponse;
 
-                        CircuitPythonStudentUI(question, questionData);
-                    });
+                            CircuitPythonStudentUI(question, questionData);
+                        });
                     })();
                 </script>
-                </div>
-                <!---------------------------------------------------------------------------->
-                <!-- End Student View -------------------------------------------------------->
-                <!---------------------------------------------------------------------------->
-                <button class="btn btn-primary pull-right" id="testSubmit">Test Submit</button>
-                <script type="module">
+            </div>
+            <!---------------------------------------------------------------------------->
+            <!-- End Student View -------------------------------------------------------->
+            <!---------------------------------------------------------------------------->
+            <button class="btn btn-primary pull-right" id="testSubmit">Test Submit</button>
+            <script type="module">
                 // Just for testing the question interface, does not get included by
                 // learn
 
                 $('#testSubmit').click((evt) => {
-                console.log('Submission Data:', getSubmission['circuitpython']($('.question.studentView')));
+                    console.log('Submission Data:', getSubmission['circuitpython']($('.question.studentView')));
                 });
-                </script>
-                </div>
+            </script>
+        </div>
 
-                <div id="questionEditor" role="tabpanel" class="tab-pane active questionBlock">
-                <!---------------------------------------------------------------------------->
-                <!-- CircuitPython Instructor View Fragment --------------------------------->
-                <!---------------------------------------------------------------------------->
+        <div id="questionEditor" role="tabpanel" class="tab-pane active questionBlock">
+            <!---------------------------------------------------------------------------->
+            <!-- CircuitPython Instructor View Fragment --------------------------------->
+            <!---------------------------------------------------------------------------->
 
-                <div class="question questionType circuitpythonquestion instructorView container"
-                th:fragment="editquestion"
-                th:id="|question_${question.id}|"
-                id="question_1234"
-                th:jsondata='${question.data}'
-                questionType="circuitpython"
-                th:qid='${question.id}'>
+            <div class="question questionType circuitpythonquestion instructorView container" th:fragment="editquestion"
+                th:id="|question_${question.id}|" id="question_1234" th:jsondata='${question.data}'
+                questionType="circuitpython" th:qid='${question.id}'>
 
                 <div class="textdescription text-muted">
-                This is the editor view for instructors to configure the CircuitPython question.
+                    This is the editor view for instructors to configure the CircuitPython question.
                 </div>
 
-                <div id="circuitpython-root"></div>
+                <div class="circuitpythonContainer"></div>
 
                 <script type="module" th:inline="javascript">
-                (() => {
-                const questionData = /*[[${question.data}]]*/ null;
-                const questionNum = /*[[${question.id}]]*/ 1234;
-                const question = document.querySelector(`#question_${questionNum}.instructorView`);
+                    import { CircuitPythonInstructorUI } from '/src/circuitpython.js';
 
-                import('/src/circuitpython.js').then(({ CircuitPythonInstructorUI, getQuestionEditorData }) => {
-                    window.initializeQuestion['circuitpython'] = CircuitPythonInstructorUI;
-                    window.getQuestionEditorData['circuitpython'] = getQuestionEditorData;
+                    (() => {
+                        let qData = {};
+                        let ui = null;
+                        
+                        applyQuestionData['circuitpython'] = (question, data) => {
+                            if (!data || !data.data) {
+                                return;
+                            }
 
-                    CircuitPythonInstructorUI(question, questionData);
-                });
-                })();
+                            data = JSON.parse(data.data);
+                            
+                            qData = data.data;
+
+                            if (question.setData) {
+                                question.setData(data)
+                            }
+                            else {
+                                CircuitPythonInstructorUI(question, qData, (newData) => { qData = newData });
+                            }
+                        }
+                        initializeQuestion['circuitpython'] = () => {};
+
+                        getQuestionEditorData['circuitpython'] = () => qData;
+                    })();
                 </script>
-                </div>
+            </div>
 
-                <!---------------------------------------------------------------------------->
-                <!-- End Question Editor ----------------------------------------------------->
-                <!---------------------------------------------------------------------------->
-<button class="btn btn-primary pull-right" id="testSave">Test Save</button>
+            <!---------------------------------------------------------------------------->
+            <!-- End Question Editor ----------------------------------------------------->
+            <!---------------------------------------------------------------------------->
+            <button class="btn btn-primary pull-right" id="testSave">Test Save</button>
 
-<script type="text/javascript">
-// Just for testing the question editor interface, does not get included by
-// learn  
-$('#testSave').click((evt)=> {
-console.log('Save data:', getQuestionEditorData['circuitpython']($('.question.instructorView')));
-});
+            <script type="text/javascript">
+                // Just for testing the question editor interface, does not get included by
+                // learn  
+                $('#testSave').click((evt) => {
+                    console.log('Save data:', getQuestionEditorData['circuitpython']($('.question.instructorView')));
+                });
 
-</script>
-</div>
-</div>
+            </script>
+        </div>
+    </div>
 
-<script type='module'>
-// Just for testing the question editor interface, does not get included by
-// learn  
+    <script type='module'>
+        // Just for testing the question editor interface, does not get included by
+        // learn  
 
-console.log("Student response getters:", getSubmission);
-console.log("instructor question initializers:", initializeQuestion);
-console.log("instructor question data setters:", applyQuestionData);
-console.log("instructor question data getters:", getQuestionEditorData);
+        console.log("Student response getters:", getSubmission);
+        console.log("instructor question initializers:", initializeQuestion);
+        console.log("instructor question data setters:", applyQuestionData);
+        console.log("instructor question data getters:", getQuestionEditorData);
 
-// Load the instructor sample question data and initialize the editor
-$.getJSON("/testquestion.json", function(data) {
-let questionData = {data: JSON.stringify(data)};
+        // Load the instructor sample question data and initialize the editor
+       // $.getJSON("/testquestion.json", function (data) {
+            let data = {}
+            let questionData = { data: JSON.stringify(data) };
 
-// Loop through the question types (should be only 1)
-Object.keys(initializeQuestion).forEach((key) => {
-console.log("Initializing editor for: " + key);
-initializeQuestion[key]($('div.questionType'));      // Prepare the editor
-console.log("Applying sample data for: " + key);
-applyQuestionData[key]($('div.questionType'), questionData); // Add data
-});
-});
+            // Loop through the question types (should be only 1)
+            Object.keys(initializeQuestion).forEach((key) => {
+                console.log("Initializing editor for: " + key);
+                initializeQuestion[key](document.querySelector('div.questionType'));      // Prepare the editor
+                console.log("Applying sample data for: " + key);
+                applyQuestionData[key](document.querySelector('div.questionType'), questionData); // Add data
+            });
+       // });
 
-</script>
+    </script>
 </body>
+
 </html>
