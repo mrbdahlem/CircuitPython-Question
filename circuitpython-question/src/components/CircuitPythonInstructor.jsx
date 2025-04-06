@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ButtonBar from "./ButtonBar";
+import ConnectionBar from "./ConnectionBar";
 
 export default function CircuitPythonInstructor({ questionData, onChange }) {
   const [filename, setFilename] = useState(questionData?.filename || "main.py");
@@ -34,7 +34,7 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
             </label>
           </div>
           <div className="col-span-1 col-start-3 rounded-tr px-2 py-2">
-            <ButtonBar />
+            <ConnectionBar />
           </div>
         </div>
         <textarea
