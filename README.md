@@ -10,7 +10,7 @@ This project defines a custom **CircuitPython-based question type** for learn.my
 - Built for use in embedded fragments via Thymeleaf
 
 - 🔧 **Student Interface**
-  - React-based code editor
+  - React-based code editor and uploader
 
 - 🧑‍🏫 **Instructor Editor**
   - Instructor view for editing starter code and question data
@@ -71,53 +71,26 @@ npm run storybook
 - Use `CircuitPythonStudent.jsx` and `CircuitPythonInstructor.jsx` for view-specific logic.
 - `circuitpython.js` handles mounting, state passing, and Learn platform integration.
 
-## 🛠️ Vite Configuration
-
-This project uses a custom vite.config.js to streamline development and build output for the Learn platform.
-
-### Custom Behavior
-
-- Library-style build outputs files to:
-  `dist/src/main/webapp/resources/plugin/question/circuitpython/`
-
-- Dev server runs at http://localhost:3000 and:
-  - Opens /index.html automatically
-  - Redirects / to /index.html
-  - Proxies most /resources/* requests to https://learn.mycode.run,
-    except the plugin path (/resources/plugin/question/circuitpython/*), which is served locally from public/
-
-### Custom Vite Plugins
-- `moveManifestPlugin`: Moves the Vite-generated manifest to dist/src/main/
-- `copyCircuitPythonHTML`: Copies the HTML fragment to public/index.html for local dev
-- `mirrorSourceToPublicPlugin`: Mirrors the latest build output into public/resources/... for development
-- `rootRedirectPlugin`: Redirects / to /index.html in the dev server
-
-## Workflow
-- Run npm run build at least once to generate output
-- Run npm run dev to start the local dev server
-- Open http://localhost:3000/ to test your plugin in a browser
-- Vite mirrors built files to public/resources/... for local access
-
-## Output
-- JavaScript, CSS, and source maps output to:
-  `dist/src/main/webapp/resources/plugin/question/circuitpython/`
-- manifest.json is relocated to:
-  `dist/src/main/manifest.json`
-
-### ✅ Development Workflow
-
-1. Run `npm run build` at least once to generate output.
-2. Run `npm run dev` to start the local server.
-3. Visit `http://localhost:3000/` to test your question plugin in an HTML shell.
-4. Changes to `dist/...` are automatically mirrored to `public/resources/...`.
-
 ---
 
-## 📦 Build
+## ⚙️ Vite Dev & Build Setup
+This project uses Vite to develop and build a circuitpython question type for learn.mycode with
+`circuitpython.html` serving as the legacy entrypoint for thymeleaf to pull the student and instructor
+interfaces.
 
-```bash
-npm run build
-```
+### 🛠 Dev Mode
+Run with `npm run dev`
+- Vite serves `circuitpython.html` from the root
+- `/src/circuitpython.js` serves as a loader for the React components for both the student and instructor UI in the
+  html fragments thymeleaf loads for the questions.
+- JS and CSS are live-reloaded automatically as components are edited.
+
+### 📦 Build Mode
+Run with `npm run build`
+- Vite bundles everything from `circuitpython.html`
+- Output goes to:
+  `dist/src/main/webapp/resources/plugin/question/circuitpython/` for JS/CSS
+  `dist/src/main/resources/templates/fragments/question/circuitpython.html` for the Thymeleaf fragment
 
 ---
 
