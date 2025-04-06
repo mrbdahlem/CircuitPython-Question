@@ -26,65 +26,22 @@ function moveManifestPlugin() {
   };
 }
 
-// Custom plugin to serve circuitpython.html as index.html
-function copyCircuitPythonHTML() {
+function moveHtmlFragmentPlugin() {
   return {
-    name: 'copy-circuitpython-html',
-    buildStart() {
-      const src = path.resolve('src/templates/circuitpython.html');
-      const dest = path.resolve('public/index.html');
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.copyFileSync(src, dest);
-    },
-  };
-};
+    name: 'move-html-fragment',
+    apply: 'build',
+    closeBundle() {
+      const from = path.resolve(__dirname, 'dist/src/main/webapp/circuitpython.html');
+      const to = path.resolve(__dirname, 'dist/src/main/resources/templates/fragments/question/circuitpython.html');
 
-// Dev plugin to copy source files into public/resources during dev server
-function mirrorSourceToPublicPlugin() {
-  return {
-    name: 'mirror-built-to-public',
-    configureServer(server) {
-      const builtDir = resolve(__dirname, 'dist/src/main/webapp/resources/plugin/question/circuitpython');
-      const devDir = resolve(__dirname, 'public/resources/plugin/question/circuitpython');
-      const copyFiles = () => {
-        if (!fs.existsSync(builtDir)) {
-          console.warn(`⚠️ No built files found at ${builtDir}`);
-          return;
-        }
-        fs.rmSync(devDir, { recursive: true, force: true });
-        fs.mkdirSync(devDir, { recursive: true });
-        const files = fs.readdirSync(builtDir);
-        for (const file of files) {
-          const src = join(builtDir, file);
-          const dest = join(devDir, file);
-          fs.copyFileSync(src, dest);
-          // console.log(`📦 Copied: ${src} → ${dest}`);
-        }
-      };
+      fs.mkdirSync(path.dirname(to), { recursive: true });
+      fs.copyFileSync(from, to);
+      fs.unlinkSync(from);
 
-      server.watcher.on('change', copyFiles);
-      if (!fs.existsSync(builtDir)) {
-        console.error(`⚠️ No built files found at ${builtDir}. Please run 'npm run build' manually.`);
-      }
-      server.watcher.on('ready', copyFiles); // initial copy
-    },
+      console.log('📄 Moved circuitpython.html → templates/fragments/question');
+    }
   };
 }
-
-function rootRedirectPlugin() {
-  return {
-    name: 'root-redirect',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        if (req.url === '/') {
-          req.url = '/index.html';
-        }
-        next();
-      });
-    },
-  };
-}
-
 
 export default defineConfig(({ command }) => {
   const isDev = command === 'serve';
@@ -96,13 +53,17 @@ export default defineConfig(({ command }) => {
       },
     },
     server: {
-    port: 3000,
-    open: "/index.html",
-    proxy: {
-      '^/resources/(?!plugin/question/circuitpython)': {
+      port: 3000,
+      open: '/circuitpython.html',
+      proxy: {
+        '^/resources/(?!plugin/question/circuitpython)': {
         target: 'https://learn.mycode.run',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/resources/, '/resources'),
+      },
+      
+      watch: {
+        ignored: ['!**/src/**'],
       },
     },
     fs: {
@@ -110,35 +71,28 @@ export default defineConfig(({ command }) => {
       },
     },
     define: {
+      __DEV__: process.env.NODE_ENV !== 'production',
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
     },
     plugins: [
       react(),
       tailwindcss(),
       moveManifestPlugin(),
-      ...(isDev ? [copyCircuitPythonHTML(), mirrorSourceToPublicPlugin(), rootRedirectPlugin()] : []),
-      
+      moveHtmlFragmentPlugin()
     ],
     build: {
-      sourcemap: true,
-      lib: {
-        entry: resolve(__dirname, 'src/circuitpython.js'),
-        name: 'CircuitPythonQuestion',
-        fileName: 'circuitpython',
-        formats: ['es'],
-      },
-      treeshake: false,
-      emptyOutDir: true,
-      outDir: 'dist/src/main/webapp',
-      manifest: true,
       rollupOptions: {
+        input: path.resolve(__dirname, 'circuitpython.html'),
         output: {
-          entryFileNames: 'resources/plugin/question/circuitpython/[name].js',
-          chunkFileNames: 'resources/plugin/question/circuitpython/[name]-[hash].js',
+          entryFileNames: 'resources/plugin/question/circuitpython/circuitpython.js',
+          chunkFileNames: 'resources/plugin/question/circuitpython/[name].js',
           assetFileNames: 'resources/plugin/question/circuitpython/[name][extname]',
         },
       },
+      outDir: 'dist/src/main/webapp',
+      sourcemap: true,
+      emptyOutDir: true,
     },
+    
   };
 });
-

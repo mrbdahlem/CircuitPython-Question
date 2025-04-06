@@ -11,7 +11,7 @@ export function getResponse(questionEl) {
   return JSON.stringify(responses[questionEl.id] || { code: '' });
 }
 
-export function getQuestionEditorData(questionEl) {
+export function getEditorData(questionEl) {
   return editorData[questionEl.id] || {};
 }
 

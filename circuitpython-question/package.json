@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",   
+    "dev": "vite",
+    "dev:full": "npm run build && vite",
     "build": "vite build",
-    "dev:full": "npm run build && vite --host",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -15,7 +15,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "serve-static": "^2.2.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.6",

@@ -9,23 +9,26 @@
         <link rel="stylesheet" href="/resources/css/bootstrap.min.css" />
         
         <!-- FIX: CSS Includes -->
-        <link rel="stylesheet" href="/resources/plugin/question/circuitpython/circuitpython.css" />
+        <link rel="stylesheet" href="/src/circuitpython.css" />
         
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
         <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
         
         <!-- FIX: Other includes -->
-        <!-- script src="/resources/plugin/question/circuitpython/circuitpython.js" -->
+        <!-- <script type="module" src="/src/circuitpython.js"></script> -->
+
         
         <script type='text/javascript'>
-let getSubmission = {};
-let initializeQuestion = {};
-let applyQuestionData = {};
-let getQuestionEditorData = {};
+window.getSubmission = {};
+window.initializeQuestion = {};
+window.applyQuestionData = {};
+window.getQuestionEditorData = {};
         </script>
     </head>
     <body>
+        <!-- VITE_PROCESSING_CHECK -->
+
         <nav>
             <ul class="nav nav-tabs">
                 <li role="presentation" >
@@ -60,18 +63,18 @@ let getQuestionEditorData = {};
                 <div th:replace="fragments/scoreblock :: score"></div>
 
                 <script type="module" th:inline="javascript">
-                import { CircuitPythonStudentUI, getResponse } from '/resources/plugin/question/circuitpython/circuitpython.js';
+                    (() => {
+                    const questionData = /*[[${question.data}]]*/ null;
+                    const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
+                    const questionNum = /*[[${question.id}]]*/ 1234;
+                    const question = document.querySelector(`#question_${questionNum}`);
 
-                getSubmission['circuitpython'] = getResponse;
+                    import('/src/circuitpython.js').then(({ CircuitPythonStudentUI, getResponse }) => {
+                        window.getSubmission['circuitpython'] = getResponse;
 
-                (() => {
-                const questionData = /*[[${question.data}]]*/ null;
-                const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
-                const questionNum = /*[[${question.id}]]*/ 1234;
-                const question = document.querySelector(`#question_${questionNum}`);
-
-                CircuitPythonStudentUI(question, questionData, responseData);
-                })();
+                        CircuitPythonStudentUI(document.getElementById('circuitpython-root'), questionData);
+                    });
+                    })();
                 </script>
                 </div>
                 <!---------------------------------------------------------------------------->
@@ -108,17 +111,17 @@ let getQuestionEditorData = {};
                 <div id="circuitpython-root"></div>
 
                 <script type="module" th:inline="javascript">
-                import { CircuitPythonInstructorUI, getQuestionEditorData } from '/resources/plugin/question/circuitpython/circuitpython.js';
-
-                initializeQuestion['circuitpython'] = CircuitPythonInstructorUI;
-                getQuestionEditorData['circuitpython'] = getQuestionEditorData;
-
                 (() => {
                 const questionData = /*[[${question.data}]]*/ null;
                 const questionNum = /*[[${question.id}]]*/ 1234;
                 const question = document.querySelector(`#question_${questionNum}.instructorView`);
 
-                CircuitPythonInstructorUI(question, questionData);
+                import('/src/circuitpython.js').then(({ CircuitPythonInstructorUI, getQuestionEditorData }) => {
+                    window.initializeQuestion['circuitpython'] = CircuitPythonInstructorUI;
+                    window.getQuestionEditorData['circuitpython'] = getQuestionEditorData;
+
+                    CircuitPythonInstructorUI(question, questionData);
+                });
                 })();
                 </script>
                 </div>
