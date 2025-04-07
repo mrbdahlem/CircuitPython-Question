@@ -1,51 +1,88 @@
 import React, { useState, useEffect } from "react";
 import ConnectionBar from "./ConnectionBar";
+import CodeFileEditor from "./CodeFileEditor";
+import FileAttributesBar from "./FileAttributesBar";
 
 export default function CircuitPythonInstructor({ questionData, onChange }) {
-  const [filename, setFilename] = useState(questionData?.filename || "main.py");
-  const [fileContent, setFileContent] = useState(questionData?.starterCode || "# Write your CircuitPython code here");
-
-  // Notify parent on change
-  useEffect(() => {
-    const newData = { filename, fileContent };
-    if (
-      questionData?.filename !== filename ||
-      questionData?.fileContent !== fileContent
-    ) {
-      onChange?.(newData);
+  const [files, setFiles] = useState(questionData?.files || [
+    {
+      id: "/starter/main.py",
+      filename: "main.py",
+      path: "/",
+      content: "# Write your CircuitPython code here"
     }
-  }, [filename, fileContent]);
+  ]);
 
-  const codeChanged = questionData?.starterCode !== fileContent;
+  const [mainFileId, setMainFileId] = useState(questionData?.mainFile || files[0]?.id);
+  const [codeChanged, setCodeChanged] = useState(false);
+  const [activeFileId, setActiveFileId] = useState(files[0]?.id);
+
+  const activeFile = files.find(f => f.id === activeFileId);
+  const isMain = activeFile?.id === mainFileId;
+
+  useEffect(() => {
+    onChange?.({ files, mainFile: mainFileId });
+  }, [files, mainFileId]);
+
+  const handleFilenameChange = (newName) => {
+    setFiles((prevFiles) =>
+      prevFiles.map((f) =>
+        f.id === activeFile.id ? { ...f, filename: newName } : f
+      )
+    );
+    setCodeChanged(true);
+  };
+
+  const handleFileContentChange = (newContent) => {
+    setFiles((prevFiles) =>
+      prevFiles.map((f) =>
+        f.id === activeFile.id ? { ...f, content: newContent } : f
+      )
+    );
+    setCodeChanged(true);
+  };
+
+  const handleFileAttributeToggle = (attribute) => {
+    setFiles((prevFiles) =>
+      prevFiles.map((f) =>
+        f.id === activeFile.id ? { ...f, [attribute]: !f[attribute] } : f
+      )
+    );
+  };
+
+  const handleSetMainFile = (fileId) => {
+    setMainFileId(fileId);
+  };
+
+  const handleUploadComplete = () => {
+    setCodeChanged(false);
+  };
+
+  const toolbar = (
+    <div className="flex flex-row-reverse flex-wrap gap-2">
+      <div className="flex-1 min-w-[300px]">
+        <ConnectionBar codeChanged={codeChanged} onUploadComplete={handleUploadComplete} />
+      </div>
+      <div className="mr-auto">
+        <FileAttributesBar
+          file={{ ...activeFile, isMain }}
+          onToggleAttribute={handleFileAttributeToggle}
+          onSetMain={handleSetMainFile}
+        />
+      </div>
+    </div>
+  );
+
+  if (!activeFile) return null;
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium mb-1">Starter Code</label>
-      <div className="overflow-hidden">
-        <div className="flex flex-col md:flex-row-reverse gap-4 flex-wrap">
-          <div className="min-w-[300px] flex-1 px-2 py-2">
-            <ConnectionBar codeChanged={codeChanged} />
-          </div>
-          <div className="relative border border-b-0 rounded-t px-2 py-2 min-w-[300px] flex-1">
-            <input
-              className="w-full px-2 pt-5 pb-1 peer rounded-b-none"
-              type="text"
-              value={filename}
-              onChange={(e) => setFilename(e.target.value)}
-              placeholder=" "
-            />
-            <label className="absolute left-4 top-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400">
-              Filename
-            </label>
-          </div>
-        </div>
-        <textarea
-          className="w-full border border-t rounded-t-none rounded-b px-2 py-1 font-mono"
-          rows={10}
-          value={fileContent}
-          onChange={(e) => setFileContent(e.target.value)}
-        />
-      </div>
+      <CodeFileEditor
+        file={{ ...activeFile, isMain }}
+        onFilenameChange={handleFilenameChange}
+        onFileContentChange={handleFileContentChange}
+        toolBar={toolbar}
+      />
     </div>
   );
 }

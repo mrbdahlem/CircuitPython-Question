@@ -15,7 +15,7 @@ function StatusBar({ connected, codeChanged, message }) {
   );
 }
 
-export default function ConnectionBar({ codeChanged: externalCodeChanged = true }) {
+export default function ConnectionBar({ codeChanged: externalCodeChanged = true, onUploadComplete }) {
   const [connected, setConnected] = useState(false);
   const [codeChanged, setCodeChanged] = useState(externalCodeChanged);
   const [message, setMessage] = useState("");
@@ -35,6 +35,7 @@ export default function ConnectionBar({ codeChanged: externalCodeChanged = true 
     if (!connected) return;
     setCodeChanged(false);
     setMessage("Code uploaded successfully.");
+    onUploadComplete?.(); // notify parent
   };
 
   const handleRun = () => {
