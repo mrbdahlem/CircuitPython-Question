@@ -16,12 +16,17 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
     }
   }, [filename, fileContent]);
 
+  const codeChanged = questionData?.starterCode !== fileContent;
+
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium mb-1">Starter Code</label>
       <div className="overflow-hidden">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="relative border border-b-0 rounded-t px-2 py-2">
+        <div className="flex flex-col md:flex-row-reverse gap-4 flex-wrap">
+          <div className="min-w-[300px] flex-1 px-2 py-2">
+            <ConnectionBar codeChanged={codeChanged} />
+          </div>
+          <div className="relative border border-b-0 rounded-t px-2 py-2 min-w-[300px] flex-1">
             <input
               className="w-full px-2 pt-5 pb-1 peer rounded-b-none"
               type="text"
@@ -32,9 +37,6 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
             <label className="absolute left-4 top-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400">
               Filename
             </label>
-          </div>
-          <div className="col-span-1 col-start-3 rounded-tr px-2 py-2">
-            <ConnectionBar />
           </div>
         </div>
         <textarea
