@@ -82,6 +82,12 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
         onFilenameChange={handleFilenameChange}
         onFileContentChange={handleFileContentChange}
         toolBar={toolbar}
+        language="python"
+        autoCloseBracketsAndQuotes={true}
+        smartIndent={true}
+        indentSize={3}
+        fontSize="1em"
+        theme="darcula"
       />
     </div>
   );
