@@ -97,7 +97,7 @@ export default defineConfig(({ command }) => {
         },
         output: {
           entryFileNames: 'resources/plugin/question/circuitpython/circuitpython.js',
-          chunkFileNames: 'resources/plugin/question/circuitpython/circuitpython-[name].js',
+          chunkFileNames: 'resources/plugin/question/circuitpython/circuitpython-[hash].js',
           assetFileNames: 'resources/plugin/question/circuitpython/[name][extname]',
         },
       },
