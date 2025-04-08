@@ -17,7 +17,7 @@
     <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
 
     <!-- FIX: Other includes -->
-
+    <script src="./src/circuitpython.js" type="module"></script>
 
     <script type='text/javascript'>
         getSubmission = {};
@@ -55,24 +55,11 @@
                     CircuitPython student prompt goes here.
                 </div>
 
-                <div class="circuitpythonContainer"></div>
-
+                <circuitpython-question th:question-data="${question.data}"
+                    th:responseData="${response != null ? response.responseData : false}"></circuitpython-question>
+                    
                 <div th:replace="fragments/scoreblock :: score"></div>
                 
-                <script type="module" th:inline="javascript">
-                    import{ CircuitPythonStudentUI, getResponse } from '/src/circuitpython.js';
-
-                    (() => {
-                        const questionData = /*[[${question.data}]]*/ null;
-                        const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
-                        const questionNum = /*[[${question.id}]]*/ 1234;
-                        const question = document.querySelector(`#question_${questionNum}`);
-
-                        window.getSubmission['circuitpython'] = getResponse;
-
-                        CircuitPythonStudentUI(question, questionData);
-                    })();
-                </script>
             </div>
             <!---------------------------------------------------------------------------->
             <!-- End Student View -------------------------------------------------------->
@@ -101,36 +88,7 @@
                     This is the editor view for instructors to configure the CircuitPython question.
                 </div>
 
-                <div class="circuitpythonContainer"></div>
-
-                <script type="module" th:inline="javascript">
-                    import { CircuitPythonInstructorUI } from '/src/circuitpython.js';
-
-                    (() => {
-                        let qData = {};
-                        let ui = null;
-                        
-                        applyQuestionData['circuitpython'] = (question, data) => {
-                            if (!data || !data.data) {
-                                return;
-                            }
-
-                            data = JSON.parse(data.data);
-                            
-                            qData = data.data;
-
-                            if (question.setData) {
-                                question.setData(data)
-                            }
-                            else {
-                                CircuitPythonInstructorUI(question, qData, (newData) => { qData = newData });
-                            }
-                        }
-                        initializeQuestion['circuitpython'] = () => {};
-
-                        getQuestionEditorData['circuitpython'] = () => qData;
-                    })();
-                </script>
+                <circuitpython-question th:question-data="${question.data}" is-instructor="true"></circuitpython-question>
             </div>
 
             <!---------------------------------------------------------------------------->

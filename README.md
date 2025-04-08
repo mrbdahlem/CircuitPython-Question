@@ -65,10 +65,38 @@ npm run storybook
 
 ---
 
-## 🏗️ Development Notes
+## 🧩 Web Components Integration
 
-- TailwindCSS is initialized via `@tailwind base;`, `components;`, and `utilities;` in `circuitpython.css`.
-- Use `CircuitPythonStudent.jsx` and `CircuitPythonInstructor.jsx` for view-specific logic.
+This question type registers a custom HTML element called <circuitpython-question>, which wraps the React-based student and instructor interfaces.
+
+💡 Benefits
+
+Allows multiple instances of the question on the same page
+
+Works seamlessly with Thymeleaf for injecting per-question data
+
+Avoids global JavaScript logic and ID collisions
+
+⚙️ Usage
+
+To use in a Thymeleaf template:
+
+```html
+<circuitpython-question
+  th:question-data="${question.data}"
+  th:response-data="${response.responseData}"
+  is-instructor="true">
+</circuitpython-question>
+```
+
+- The question-data and response-data props are passed as attributes (JSON strings)
+
+- The is-instructor attribute toggles between instructor and student views (defaults to false)
+
+🏗️ Development Notes
+
+- TailwindCSS is initialized in `circuitpython.css`.
+- Use CircuitPythonStudent.jsx` and `CircuitPythonInstructor.jsx` for view-specific logic. `CircuitPythonQuestion.jsx is a one-stop-shop for both.
 - `circuitpython.js` handles mounting, state passing, and Learn platform integration.
 
 ---
@@ -89,7 +117,9 @@ Run with `npm run dev`
 Run with `npm run build`
 - Vite bundles everything from `circuitpython.html`
 - Output goes to:
+
   `dist/src/main/webapp/resources/plugin/question/circuitpython/` for JS/CSS
+
   `dist/src/main/resources/templates/fragments/question/circuitpython.html` for the Thymeleaf fragment
 
 ---

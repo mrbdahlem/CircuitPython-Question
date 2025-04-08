@@ -3,20 +3,18 @@ import ReactDOM from 'react-dom/client';
 import CircuitPythonStudent from './components/CircuitPythonStudent.jsx';
 import CircuitPythonInstructor from './components/CircuitPythonInstructor.jsx';
 import "./circuitpython.css";
+import '/src/components/CircuitPythonQuestion.jsx';
+
 
 let circuitpythonEditors = {};
 
 const editorData = {};
 
-export function initCircuitPythonEditor(question) {
-    if (!circuitpythonEditors[question]) {
-      circuitpythonEditors[question] = ()=>{console.log(init, question); CircuitPythonInstructorUI(question, null, null)};
-    }
-}
-
-export function getResponse(question) {
-  
-}
+// export function initCircuitPythonEditor(question) {
+//     if (!circuitpythonEditors[question]) {
+//       circuitpythonEditors[question] = ()=>{console.log(init, question); CircuitPythonInstructorUI(question, null, null)};
+//     }
+// }
 
 export const CircuitPythonStudentUI = (questionEl, questionData, responseData, onResponseChange) => {
   const mount = questionEl.querySelector('.circuitpythonContainer');
