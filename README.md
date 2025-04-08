@@ -30,15 +30,15 @@ This project defines a custom **CircuitPython-based question type** for learn.my
 ## 📁 Project Structure
 
 ```
+circuitpython.html                     # Thymeleaf fragments
 src/
-├─ assets/templates/fragments/question/circuitpython.html   # Thymeleaf fragments
-├─ resources/plugin/question/circuitpython/
-│  ├─ circuitpython.js                 # Entry point for question logic
-│  ├─ circuitpython.css                # TailwindCSS entry
-│  ├─ components/
-│  │  ├─ CircuitPythonStudent.jsx      # Student-facing component
-│  │  ├─ CircuitPythonInstructor.jsx   # Instructor editor component
-│  │  └─ CircuitPython.stories.jsx     # Storybook stories for both views
+├─ circuitpython.js                 # Entry point for question logic
+├─ circuitpython.css                # TailwindCSS entry
+├─ components/
+│  ├─ CircuitPythonStudent.jsx      # Student-facing component
+│  ├─ CircuitPythonInstructor.jsx   # Instructor editor component
+│  ├─ CircuitPython.stories.jsx     # Storybook stories for both views
+│  │
 ```
 
 ---
