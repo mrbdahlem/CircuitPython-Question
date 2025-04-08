@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import CircuitPythonStudent from './CircuitPythonStudent';
 import CircuitPythonInstructor from './CircuitPythonInstructor';
@@ -45,12 +45,14 @@ class CircuitPythonQuestionElement extends HTMLElement {
 
     this._root = createRoot(this._mountPoint);
     this._root.render(
-      <CircuitPythonQuestion
-        questionData={questionData ? JSON.parse(questionData) : null}
-        responseData={responseData ? JSON.parse(responseData) : null}
-        isInstructor={isInstructor}
-        onChange={(data) => { this._latestData = data; }}
-      />
+      <StrictMode>
+        <CircuitPythonQuestion
+          questionData={questionData ? JSON.parse(questionData) : null}
+          responseData={responseData ? JSON.parse(responseData) : null}
+          isInstructor={isInstructor}
+          onChange={(data) => { this._latestData = data; }}
+        />
+      </StrictMode>
     );
   }
 }
