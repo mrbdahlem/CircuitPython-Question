@@ -24,6 +24,17 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Determine effective version
+        id: version
+        run: |
+          if [ -z "${{ github.event.inputs.version }}" ]; then
+            fallback_version=$(git describe --tags --abbrev=0 || echo 0.0.1-SNAPSHOT)
+            echo "Using fallback version: $fallback_version"
+            echo "version=$fallback_version" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -60,12 +71,20 @@ jobs:
           EOF
 
       - name: Build and deploy JAR
-        run: mvn --batch-mode clean deploy -DskipTests -Drevision=${{ github.event.inputs.version || '0.0.1-SNAPSHOT' }}
+        run: mvn --batch-mode clean deploy -DskipTests -Drevision=${{ steps.version.outputs.version }}
 
-      - name: Create Git tag
-        if: ${{ github.event.inputs.version }}
+      - name: Create Git tag (if it doesn't exist)
+        if: ${{ steps.version.outputs.version }}
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git tag ${{ github.event.inputs.version }}
-          git push origin ${{ github.event.inputs.version }}
+      
+          tag=${{ steps.version.outputs.version }}
+          if git ls-remote --tags origin | grep -q "refs/tags/$tag"; then
+            echo "Tag '$tag' already exists. Skipping tag creation."
+          else
+            git tag "$tag"
+            git push origin "$tag"
+          fi
+      
+
