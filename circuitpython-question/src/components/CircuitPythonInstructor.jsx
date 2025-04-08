@@ -67,36 +67,24 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
     setCodeChanged(false);
   };
 
-  const toolbar = (
-    <div className="flex flex-row-reverse flex-wrap gap-2">
-      <div className="flex-1 min-w-[300px]">
-        <ConnectionBar codeChanged={codeChanged} onUploadComplete={handleUploadComplete} />
-      </div>
-      <div className="mr-auto">
-        <FileAttributesBar
-          file={{ ...activeFile, isMain }}
-          onToggleAttribute={handleFileAttributeToggle}
-          onSetMain={handleSetMainFile}
-        />
-      </div>
-    </div>
+  const editFileAttributes = (
+    <FileAttributesBar
+      file={{ ...activeFile, isMain }}
+      onToggleAttribute={handleFileAttributeToggle}
+      onSetMain={handleSetMainFile}
+    />
   );
-
+  
   if (!activeFile) return null;
 
   return (
     <div className="space-y-2">
+      <ConnectionBar codeChanged={codeChanged} onUploadComplete={handleUploadComplete} />
       <CodeFileEditor
         file={{ ...activeFile, isMain }}
         onFilenameChange={handleFilenameChange}
         onFileContentChange={handleFileContentChange}
-        toolBar={toolbar}
-        language="python"
-        autoCloseBracketsAndQuotes={true}
-        smartIndent={true}
-        indentSize={3}
-        fontSize="1em"
-        theme="darcula"
+        toolBar={editFileAttributes}
       />
     </div>
   );
