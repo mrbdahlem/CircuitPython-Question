@@ -1,7 +1,11 @@
 name: Build and Deploy Maven Package
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to apply (e.g. v0.0.1)'
+        required: false
   # push:
   #   branches: [ main ]
 
@@ -57,3 +61,11 @@ jobs:
 
       - name: Build and deploy JAR
         run: mvn --batch-mode clean deploy -DskipTests
+
+      - name: Create Git tag
+        if: ${{ github.event.inputs.version }}
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
