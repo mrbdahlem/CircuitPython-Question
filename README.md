@@ -90,8 +90,7 @@ To use in a Thymeleaf template:
 ```
 
 - The question-data and response-data props are passed as attributes (JSON strings)
-
-- The is-instructor attribute toggles between instructor and student views (defaults to false)
+- The is-instructor attribute defaults to false and shows the student view when not present.
 
 🏗️ Development Notes
 
