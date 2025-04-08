@@ -8,10 +8,14 @@ let circuitpythonEditors = {};
 
 const editorData = {};
 
-export function initParsonsEditor(question) {
+export function initCircuitPythonEditor(question) {
     if (!circuitpythonEditors[question]) {
       circuitpythonEditors[question] = ()=>{console.log(init, question); CircuitPythonInstructorUI(question, null, null)};
     }
+}
+
+export function getResponse(question) {
+  
 }
 
 export const CircuitPythonStudentUI = (questionEl, questionData, responseData, onResponseChange) => {

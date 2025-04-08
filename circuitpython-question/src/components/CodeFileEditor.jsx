@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
-import { loadLanguage } from "@uiw/codemirror-extensions-langs";
+import { loadLanguageExtension } from "./languageLoader";
+
 import { EditorView } from "@codemirror/view";
 import * as themes from "@uiw/codemirror-themes-all";
 
@@ -24,9 +25,12 @@ export default function CodeFileEditor({
   fontSize = "1em",
   theme = "darcula"
 }) {
-  const getLanguageExtension = (lang) => {
-    return loadLanguage(lang);
-  };
+  const [languageExtension, setLanguageExtension] = useState([]);
+
+  useEffect(() => {
+    loadLanguageExtension(language).then((ext) => setLanguageExtension(ext));
+  }, [language]);
+
 
   const fontSizeTheme = EditorView.theme({
     ".cm-content, .cm-gutters": {
@@ -41,6 +45,7 @@ export default function CodeFileEditor({
       <div className="flex flex-col-reverse md:flex-row items-end">
         <div className="relative border border-b-0 rounded-t px-2 py-2 w-full min-w-[100px] md:w-auto md:max-w-[300px]">
           <input
+            id='filenameInput'
             className="w-full px-2 pt-5 pb-1 peer rounded-b-none"
             style={{ fontSize }}
             type="text"
@@ -48,7 +53,7 @@ export default function CodeFileEditor({
             onChange={(e) => onFilenameChange(e.target.value)}
             placeholder=" "
           />
-          <label className="absolute left-4 top-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400">
+          <label htmlFor='filenameInput' className="absolute left-4 top-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400">
             Filename
           </label>
         </div>
@@ -60,10 +65,10 @@ export default function CodeFileEditor({
       <CodeMirror
         value={file.content}
         height="300px"
-        extensions={[getLanguageExtension(language), fontSizeTheme]}
+        extensions={[languageExtension, fontSizeTheme]}
         theme={resolvedTheme}
-        basicSetup={{ 
-          lineNumbers: true, 
+        basicSetup={{
+          lineNumbers: true,
           autocompletion: false,
           highlightActiveLine: false,
           closeBrackets: autoCloseBracketsAndQuotes,

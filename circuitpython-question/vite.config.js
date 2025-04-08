@@ -31,12 +31,12 @@ function moveHtmlFragmentPlugin() {
     name: 'move-html-fragment',
     apply: 'build',
     closeBundle() {
-      const from = path.resolve(__dirname, 'dist/src/main/webapp/index.html');
+      const from = path.resolve(__dirname, 'dist/src/main/webapp/circuitpython.html');
       const to = path.resolve(__dirname, 'dist/src/main/resources/templates/fragments/question/circuitpython.html');
 
       fs.mkdirSync(path.dirname(to), { recursive: true });
       fs.copyFileSync(from, to);
-      fs.unlinkSync(from);
+      fs.unlinkSync(from); // delete original
 
       console.log('📄 Moved circuitpython.html → templates/fragments/question');
     }
@@ -92,10 +92,12 @@ export default defineConfig(({ command }) => {
     ],
     build: {
       rollupOptions: {
-        input: path.resolve(__dirname, 'circuitpython.html'),
+        input: {
+          circuitpython: path.resolve(__dirname, 'circuitpython.html'),
+        },
         output: {
           entryFileNames: 'resources/plugin/question/circuitpython/circuitpython.js',
-          chunkFileNames: 'resources/plugin/question/circuitpython/[name].js',
+          chunkFileNames: 'resources/plugin/question/circuitpython/circuitpython-[name].js',
           assetFileNames: 'resources/plugin/question/circuitpython/[name][extname]',
         },
       },

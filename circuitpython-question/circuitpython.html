@@ -17,7 +17,6 @@
     <script src="https://learn.mycode.run/resources/js/assignment.js"></script>
 
     <!-- FIX: Other includes -->
-    <!-- <script type="module" src="/src/circuitpython.js"></script> -->
 
 
     <script type='text/javascript'>
@@ -59,19 +58,19 @@
                 <div class="circuitpythonContainer"></div>
 
                 <div th:replace="fragments/scoreblock :: score"></div>
-
+                
                 <script type="module" th:inline="javascript">
+                    import{ CircuitPythonStudentUI, getResponse } from '/src/circuitpython.js';
+
                     (() => {
                         const questionData = /*[[${question.data}]]*/ null;
                         const responseData = /*[[${response != null ? response.responseData : false}]]*/ null;
                         const questionNum = /*[[${question.id}]]*/ 1234;
                         const question = document.querySelector(`#question_${questionNum}`);
 
-                        import('/src/circuitpython.js').then(({ CircuitPythonStudentUI, getResponse }) => {
-                            window.getSubmission['circuitpython'] = getResponse;
+                        window.getSubmission['circuitpython'] = getResponse;
 
-                            CircuitPythonStudentUI(question, questionData);
-                        });
+                        CircuitPythonStudentUI(question, questionData);
                     })();
                 </script>
             </div>

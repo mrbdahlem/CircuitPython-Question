@@ -25,6 +25,15 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
   }, [files, mainFileId]);
 
   const handleFilenameChange = (newName) => {
+    // TODO: ensure no duplicates in folder
+    // TODO: replace alert.
+    
+    // Basic filename validation
+    if (newName.includes("/")) {
+      alert("Filenames cannot contain slashes.");
+      return;
+    }
+
     setFiles((prevFiles) =>
       prevFiles.map((f) =>
         f.id === activeFile.id ? { ...f, filename: newName } : f
