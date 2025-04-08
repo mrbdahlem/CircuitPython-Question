@@ -31,8 +31,8 @@ function moveHtmlFragmentPlugin() {
     name: 'move-html-fragment',
     apply: 'build',
     closeBundle() {
-      const from = path.resolve(__dirname, 'dist/src/main/webapp/circuitpython.html');
-      const to = path.resolve(__dirname, 'dist/src/main/resources/templates/fragments/question/circuitpython.html');
+      const from = path.resolve(__dirname, 'dist/circuitpython.html');
+      const to = path.resolve(__dirname, 'dist/templates/fragments/question/circuitpython.html');
 
       fs.mkdirSync(path.dirname(to), { recursive: true });
       fs.copyFileSync(from, to);
@@ -96,12 +96,12 @@ export default defineConfig(({ command }) => {
           circuitpython: path.resolve(__dirname, 'circuitpython.html'),
         },
         output: {
-          entryFileNames: 'resources/plugin/question/circuitpython/circuitpython.js',
-          chunkFileNames: 'resources/plugin/question/circuitpython/circuitpython-[hash].js',
-          assetFileNames: 'resources/plugin/question/circuitpython/[name][extname]',
+          entryFileNames: 'META-INF/resources/plugin/question/circuitpython/circuitpython.js',
+          chunkFileNames: 'META-INF/resources/plugin/question/circuitpython/circuitpython-[hash].js',
+          assetFileNames: 'META-INF/resources/plugin/question/circuitpython/[name][extname]',
         },
       },
-      outDir: 'dist/src/main/webapp',
+      outDir: 'dist',
       sourcemap: true,
       emptyOutDir: true,
     },
