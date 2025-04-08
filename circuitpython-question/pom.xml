@@ -4,13 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>run.mycode</groupId>
+    <groupId>org.learnmycode</groupId>
     <artifactId>circuitpython-question</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
     <name>CircuitPython Question Type</name>
     <description>Standalone WebJAR-style bundle for the CircuitPython question type used in Learn</description>
-
+    
+    <properties>
+        <revision>0.0.1-SNAPSHOT</revision>
+    </properties>
+    
     <scm>
         <connection>scm:git:git:github.com/mrbdahlem/CircuitPython-Question.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/mrbdahlem/CircuitPython-Question.git</developerConnection>
@@ -73,5 +77,5 @@
             <url>https://maven.pkg.github.com/mrbdahlem/CircuitPython-Question</url>
         </repository>
     </distributionManagement>
-
+    
 </project>

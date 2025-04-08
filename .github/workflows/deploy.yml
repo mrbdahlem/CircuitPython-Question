@@ -60,7 +60,7 @@ jobs:
           EOF
 
       - name: Build and deploy JAR
-        run: mvn --batch-mode clean deploy -DskipTests
+        run: mvn --batch-mode clean deploy -DskipTests -Drevision=${{ github.event.inputs.version || '0.0.1-SNAPSHOT' }}
 
       - name: Create Git tag
         if: ${{ github.event.inputs.version }}
