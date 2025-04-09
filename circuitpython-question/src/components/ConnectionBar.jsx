@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function StatusBar({ connected, codeChanged, message }) {
+function StatusBar({ connected, uploaded, message }) {
   return (
     <div className="mt-2 text-sm text-gray-700 flex flex-wrap items-center justify-end gap-x-2">
       {message && <span className="whitespace-nowrap">{message}</span>}
@@ -8,38 +8,39 @@ function StatusBar({ connected, codeChanged, message }) {
         {connected ? "Connected" : "Disconnected"}
       </span>
       <span>|</span>
-      <span className={`font-medium whitespace-nowrap ${codeChanged ? "text-red-500" : "text-green-600"}`}>
-        Code {codeChanged ? "Modified" : "Uploaded"}
+      <span className={`font-medium whitespace-nowrap ${uploaded ? "text-green-600" : "text-red-500"}`}>
+        Code {uploaded ? "" : "Not" } Uploaded
       </span>
     </div>
   );
 }
 
-export default function ConnectionBar({ codeChanged: externalCodeChanged = true, onUploadComplete }) {
+export default function ConnectionBar({ codeChanged = true, onUploadComplete }) {
   const [connected, setConnected] = useState(false);
-  const [codeChanged, setCodeChanged] = useState(externalCodeChanged);
+  const [uploaded, setUploaded] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    setCodeChanged(externalCodeChanged);
-  }, [externalCodeChanged]);
+    if (codeChanged) setUploaded(false);
+  }, [codeChanged]);
 
   const handleConnect = () => {
     const newState = !connected;
     setConnected(newState);
     setMessage(newState ? "Device connected." : "Device disconnected.");
-    if (!newState) setCodeChanged(true);
+    setUploaded(false);
   };
 
   const handleUpload = () => {
     if (!connected) return;
-    setCodeChanged(false);
+    
+    setUploaded(true);
     setMessage("Code uploaded successfully.");
     onUploadComplete?.(); // notify parent
   };
 
   const handleRun = () => {
-    if (!connected || codeChanged) return;
+    if (!(connected && uploaded)) return;
     setMessage("Code running on device.");
   };
 
@@ -63,13 +64,13 @@ export default function ConnectionBar({ codeChanged: externalCodeChanged = true,
 
           <button
             onClick={handleRun}
-            disabled={!connected || codeChanged}
-            className={`px-3 py-1 rounded text-white ${connected && !codeChanged ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"}`}
+            disabled={!(connected && uploaded)}
+            className={`px-3 py-1 rounded text-white ${(connected && uploaded) ? "bg-green-500 hover:bg-green-600" : "bg-gray-400 cursor-not-allowed"}`}
           >
             Run
           </button>
         </div>
-      <StatusBar connected={connected} codeChanged={codeChanged} message={message} />
+      <StatusBar connected={connected} uploaded={connected && uploaded} message={message} />
     </div>
   );
 }
