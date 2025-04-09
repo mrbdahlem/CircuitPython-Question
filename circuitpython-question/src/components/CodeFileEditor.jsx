@@ -15,6 +15,7 @@ export { availableThemes };
 
 export default function CodeFileEditor({
   file,
+  readOnly,
   onFilenameChange,
   onFileContentChange,
   toolBar,
@@ -49,12 +50,13 @@ export default function CodeFileEditor({
             className="w-full px-2 pt-5 pb-1 peer rounded-b-none"
             style={{ fontSize }}
             type="text"
-            value={file.filename}
+            value={file ? file.name : ''}
             onChange={(e) => onFilenameChange(e.target.value)}
             placeholder=" "
+            enabled={!readOnly && file}
           />
           <label htmlFor='filenameInput' className="absolute left-4 top-3 text-xs text-gray-500 transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400">
-            Filename
+            File Name
           </label>
         </div>
 
@@ -63,7 +65,8 @@ export default function CodeFileEditor({
         </div>
       </div>
       <CodeMirror
-        value={file.content}
+        value={file ? file.content : ''}
+        readOnly={readOnly || !file}
         height="300px"
         extensions={[languageExtension, fontSizeTheme]}
         theme={resolvedTheme}

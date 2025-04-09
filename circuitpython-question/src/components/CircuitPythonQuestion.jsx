@@ -75,5 +75,6 @@ window.getSubmission['circuitpython'] = function(questionEl) {
 
 //window.getQuestionEditorData = window.getQuestionEditorData || {};
 window.getQuestionEditorData['circuitpython'] = function(questionEl) {
-  return questionEl.querySelector('circuitpython-question')._latestData;
+  const el = questionEl.jquery ? questionEl[0] : questionEl;
+  return el.querySelector('circuitpython-question')._latestData;
 };

@@ -5,6 +5,7 @@ import path from 'path';
 const { resolve, dirname, join } = path;
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import svgr from 'vite-plugin-svgr';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -84,6 +85,10 @@ export default defineConfig(({ command }) => {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
     },
     plugins: [
+      svgr({
+        svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
+        include: '**/*.svg',
+      }),
       react(),
       tailwindcss(),
       moveManifestPlugin(),

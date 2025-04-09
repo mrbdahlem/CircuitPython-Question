@@ -1,71 +1,86 @@
 import React, { useState, useEffect } from "react";
 import ConnectionBar from "./ConnectionBar";
-import CodeFileEditor from "./CodeFileEditor";
+import MultiFileEditor from "./MultiFileEditor";
 import FileAttributesBar from "./FileAttributesBar";
 
 export default function CircuitPythonInstructor({ questionData, onChange }) {
   const [files, setFiles] = useState(questionData?.files || [
     {
-      id: "/starter/main.py",
-      filename: "main.py",
-      path: "/",
+      name: "main.py",
+      path: "/starter",
       content: "# Write your CircuitPython code here"
+    },
+    {
+      name: "other.py",
+      path: "/solution",
+      content: "def hello():\n    print('hi')\n"
     }
   ]);
 
-  const [mainFileId, setMainFileId] = useState(questionData?.mainFile || files[0]?.id);
+  const [mainFilePath, setMainFilePath] = useState(questionData?.mainFile || `${files[0].path}/${files[0].name}`);
   const [codeChanged, setCodeChanged] = useState(false);
-  const [activeFileId, setActiveFileId] = useState(files[0]?.id);
+  const [activeFilePath, setActiveFilePath] = useState(`${files[0].path}/${files[0].name}`);
+  const [activePath, setActivePath] = useState(`${files[0].path}`)
 
-  const activeFile = files.find(f => f.id === activeFileId);
-  const isMain = activeFile?.id === mainFileId;
+  const activeFile = files.find(f => `${f.path}/${f.name}` === activeFilePath);
+  const isMain = `${activeFile?.path}/${activeFile?.name}` === mainFilePath;
 
   useEffect(() => {
-    onChange?.({ files, mainFile: mainFileId });
-  }, [files, mainFileId]);
+    onChange?.({ files, mainFile: mainFilePath });
+  }, [files, mainFilePath]);
 
   const handleFilenameChange = (newName) => {
-    // TODO: ensure no duplicates in folder
-    // TODO: replace alert.
-    
-    // Basic filename validation
     if (newName.includes("/")) {
-      alert("Filenames cannot contain slashes.");
+      alert("File names cannot contain slashes.");
       return;
     }
 
-    setFiles((prevFiles) =>
-      prevFiles.map((f) =>
-        f.id === activeFile.id ? { ...f, filename: newName } : f
-      )
-    );
+    const newPath = activePath + '/' + newName;
+
+    if (isMain) setMainFilePath(newPath);
+    setActiveFilePath(newPath);
+
+    setFiles(prevFiles => prevFiles.map(f =>
+      `${f.path}/${f.name}` === activeFilePath ? { ...f, name: newName } : f
+    ));
+
     setCodeChanged(true);
   };
 
   const handleFileContentChange = (newContent) => {
-    setFiles((prevFiles) =>
-      prevFiles.map((f) =>
-        f.id === activeFile.id ? { ...f, content: newContent } : f
-      )
-    );
+    setFiles(prevFiles => prevFiles.map(f =>
+      `${f.path}/${f.name}` === activeFilePath ? { ...f, content: newContent } : f
+    ));
     setCodeChanged(true);
   };
 
   const handleFileAttributeToggle = (attribute) => {
-    setFiles((prevFiles) =>
-      prevFiles.map((f) =>
-        f.id === activeFile.id ? { ...f, [attribute]: !f[attribute] } : f
-      )
-    );
+    setFiles(prevFiles => prevFiles.map(f =>
+      `${f.path}/${f.name}` === activeFilePath ? { ...f, [attribute]: !f[attribute] } : f
+    ));
   };
 
-  const handleSetMainFile = (fileId) => {
-    setMainFileId(fileId);
+  const handleSetMainFile = () => {
+    console.log('newmain', activeFilePath);
+    setMainFilePath(activeFilePath);
   };
 
   const handleUploadComplete = () => {
     setCodeChanged(false);
   };
+
+  const handleSetActiveFile = (fileId) => {
+    setActiveFilePath(fileId);
+
+    const newPath = files.find(f => `${f.path}/${f.name}` === fileId)?.path;
+    
+    if (newPath) setActivePath(newPath);
+  }
+
+  const handleSetActivePath = (path) => {
+    setActiveFilePath(null);
+    setActivePath(path);
+  }
 
   const editFileAttributes = (
     <FileAttributesBar
@@ -74,17 +89,21 @@ export default function CircuitPythonInstructor({ questionData, onChange }) {
       onSetMain={handleSetMainFile}
     />
   );
-  
-  if (!activeFile) return null;
 
   return (
     <div className="space-y-2">
       <ConnectionBar codeChanged={codeChanged} onUploadComplete={handleUploadComplete} />
-      <CodeFileEditor
-        file={{ ...activeFile, isMain }}
-        onFilenameChange={handleFilenameChange}
+      <MultiFileEditor
+        files={files}
+        activeFilePath={activeFilePath}
+        activePath={activePath}
+        onSetActiveFile={handleSetActiveFile}
+        onSetActivePath={handleSetActivePath}
         onFileContentChange={handleFileContentChange}
+        mainFilePath={mainFilePath}
+        onSetMainFile={handleSetMainFile}
         toolBar={editFileAttributes}
+        onFilenameChange={handleFilenameChange}
       />
     </div>
   );
